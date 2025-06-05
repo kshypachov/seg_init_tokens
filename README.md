@@ -49,25 +49,34 @@ startupProbe:
   failureThreshold: 1000000
 ```
 
-- The `failureThreshold` is set to `1000000` to allow up to ~11 days before the Pod is marked as failed.
+- The `failureThreshold` is set to `1000000` to allow up to ~11 days before the Pod is marked as failed and wir restart.
 - If something goes wrong, your monitoring tools will have **plenty of time** to alert you.
+- 1,000,000 seconds ≈ **11 days**, giving you plenty of time to fix things or panic.
+- With 4 startup attempts per failed Pod, you’ve got nearly **1.5 months** before most HSMs lock.  
+  So take a breath. Enjoy some ☕.
 
 > Bonus: with 4 startup attempts per failure, you have about **1.5 months** before an HSM with a 5-attempt limit is locked out.
 
 ## ✅ Exit Codes
 
-| Code | Meaning              |
-|------|----------------------|
-| `0`  | All tokens logged in |
-| `1`  | Error occurred       |
+| Code | Meaning |
+|------|---------|
+| `0`  | All tokens processed successfully. |
+| `1`  | (Rare) Error occurred **before** infinite waiting started — see logs. |
+| —    | No exit at all — the script entered infinite waiting to prevent token lockout. |
 
 ## 🔗 Dependencies
 
 - [`token_login`](https://github.com/kshypachov/token_login)
 - [`trembita-healthcheck`](https://github.com/kshypachov/trembita-healthcheck)
 
-Make sure both are available in the container PATH.
+Make sure both are in the container’s `PATH`. Or else… infinite sleep again.
 
 ## 📄 License
 
 MIT or other, if applicable.
+
+---
+
+> _“token-initializer doesn't retry, it reflects.”_
+
