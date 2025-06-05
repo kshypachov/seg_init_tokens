@@ -35,7 +35,14 @@ To determine the correct `token-id` to use (such as `0`, `ciplus-78-5`, or `cipl
 2. Navigate to the **"Keys and Certificates"** tab.
 3. Locate the value under the column `Token ID` — that is what you should use in `UXP_TOKENS_PASS`.
 
-_(Insert screenshot here if you're adding one to the repo)_
+**Soft Token Example (token-id = 0)**  
+![soft_token0.png](img/soft_token0.png)
+
+**Gryada-301 HSM Example (token-id = ciplus-78-5)**  
+![Gryda301.png](img/Gryda301.png)
+
+**Cipher HSM Example (token-id = ciplus-89-1109442605)**  
+![CipherHSM.png](img/CipherHSM.png)
 
 ### How it works
 
