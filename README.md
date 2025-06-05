@@ -4,16 +4,38 @@ This utility is used for automated login to tokens (software or HSM) in the **Tr
 
 ## 📦 Description
 
-The utility reads the `UXP_TOKENS_PASS` environment variable, which must contain a comma-separated list of `token-id:password` pairs, such as:
+The utility reads the `UXP_TOKENS_PASS` environment variable, which must contain a list of `token-id:password` pairs, separated by commas:
 
-```
+```bash
 UXP_TOKENS_PASS="0:1233,ciplus-78-5:##user##pass,ciplus-89-1109442605:12345678"
 ```
 
-Each pair is in the format `token-id:password`, and pairs are separated by commas.
+Each pair follows the format: `token-id:password`.
 
-> ⚠️ Please **do not use colons (`:`) or commas (`,`) in your token passwords** — this isn’t YAML parsing magic.
+> ⚠️ Please **do not use colons (`:`) or commas (`,`) inside token passwords** — this isn’t YAML parsing magic and the parser will break.
 
+### 🔐 Examples of Supported Tokens
+
+- `0:1233`  
+  → A software token provided by Trembita 2.0. Software tokens are numbered `0–9`. When a new Security Server (ШБО) is created, the first token is typically `0`.
+
+- `ciplus-78-5:##user##pass`  
+  → A token-password pair for a **Gryada-301 HSM**. Gryada often requires both a cell login and password. The format `##user##pass` includes:
+  - `user`: login for the HSM cell
+  - `pass`: password for that cell
+
+- `ciplus-89-1109442605:12345678`  
+  → A token-password pair for a **Cipher HSM**.
+
+### 🆔 Where to Find `token-id`?
+
+To determine the correct `token-id` to use (such as `0`, `ciplus-78-5`, or `ciplus-89-1109442605`):
+
+1. Open the **Trembita 2.0 Security Server Web UI**.
+2. Navigate to the **"Keys and Certificates"** tab.
+3. Locate the value under the column `Token ID` — that is what you should use in `UXP_TOKENS_PASS`.
+
+_(Insert screenshot here if you're adding one to the repo)_
 
 ### How it works
 
