@@ -46,19 +46,21 @@ To determine the correct `token-id` to use (such as `0`, `ciplus-78-5`, or `cipl
 
 ### How it works
 
-1. If `UXP_TOKENS_PASS` is not set, the utility exits with an error.
-2. If set, the string is split into key:value pairs and processed sequentially.
-3. For each pair:
-   - Runs [`token_login`](https://github.com/kshypachov/token_login) with `-w <id> <password>` to set the password.
-   - If it fails, the utility enters **infinite wait** to prevent further retries.
-4. Then performs 10 iterations:
-   - Runs [`trembita-healthcheck`](https://github.com/kshypachov/trembita-healthcheck) to verify the proxy is operable.
-   - Runs `token_login -r <id>` to verify the token accepted the password.
-   - Any failure → enters infinite wait.
+### 🔄 How it works
 
-After all tokens are processed:
-- If the last `trembita-healthcheck` fails → infinite wait.
-- If successful → exits with code 0.
+1. If `UXP_TOKENS_PASS` is not set, the utility exits with an error.
+2. If it is set, the string is split into `token-id:password` pairs and processed **one by one**.
+3. For each pair:
+    - The utility runs [`token_login`](https://github.com/kshypachov/token_login) with `-w <id> <password>` to set the password.
+        - If this step fails, the utility enters **infinite wait** to avoid retries (and potential token lockouts).
+    - Then, it performs **10 iterations**:
+        - Calls [`trembita-healthcheck`](https://github.com/kshypachov/trembita-healthcheck) to check if the proxy is operational.
+        - Calls `token_login -r <id>` to check if the token accepted the password.
+        - If any iteration fails → enters infinite wait immediately.
+
+4. After all pairs are processed:
+    - If the final healthcheck result indicates a problem → infinite wait again.
+    - If everything looks good → exits with code `0`.
 
 ## ♻️ Why infinite waiting?
 
