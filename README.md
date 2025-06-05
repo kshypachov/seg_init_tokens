@@ -10,8 +10,10 @@ The utility reads the `UXP_TOKENS_PASS` environment variable, which must contain
 UXP_TOKENS_PASS="0:1233,ciplus-78-5:##user##pass,ciplus-89-1109442605:12345678"
 ```
 
-Each pair is separated by a **comma**, and the token ID and password are separated by a **colon**.  
-⚠️ **Do not use commas or colons in token passwords.**
+Each pair is in the format `token-id:password`, and pairs are separated by commas.
+
+> ⚠️ Please **do not use colons (`:`) or commas (`,`) in your token passwords** — this isn’t YAML parsing magic.
+
 
 ### How it works
 
